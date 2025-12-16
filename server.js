@@ -34,6 +34,7 @@ app.use(cors({
     origin: allowedOrigin,
     credentials: true,
 }));
+
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
