@@ -54,7 +54,7 @@ exports.login = async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // Secure in production
-            sameSite: "none", // "lax"
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 60*60*1000*2 // 2h
         });
 
@@ -98,15 +98,18 @@ exports.userVerify = async (req, res) => {
 // User logout
 exports.logout = (req, res) => {
     // Clear the token cookie
-    res.clearCookie("token", {
+    res.clearCookie('token', {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         path: "/"
     });
 
-    res.cookie("token", "", {
+    res.cookie('token', '', {
         expires: new Date(0),
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         path: "/"
     });
 
